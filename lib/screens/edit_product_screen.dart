@@ -99,15 +99,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
             ],
           ),
         );
-      } finally {
-        _isProcessLoading(false);
-        Navigator.of(context).pop();
       }
     } else {
-      productData.updateProduct(_editedProduct.id, _editedProduct);
-      _isProcessLoading(false);
-      Navigator.of(context).pop();
+      await productData.updateProduct(_editedProduct.id, _editedProduct);
     }
+    _isProcessLoading(false);
+    Navigator.of(context).pop();
   }
 
   void _isProcessLoading(bool isProcess) {
