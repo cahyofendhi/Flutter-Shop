@@ -12,6 +12,7 @@ class UserProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scafold = Scaffold.of(context);
     return ListTile(
       title: Text(title),
       leading: CircleAvatar(
@@ -20,26 +21,34 @@ class UserProductItem extends StatelessWidget {
         ),
       ),
       trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.edit),
-              color: Theme.of(context).primaryColor,
-              onPressed: () {
-                Navigator.of(context)
-                .pushNamed(EditProductScreen.routeName, arguments: id);
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.delete),
-              color: Theme.of(context).accentColor,
-              onPressed: () {
-                Provider.of<Products>(context, listen: false)
-                .deleteProduct(id);
-              },
-            )
-          ],
-        ),
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          IconButton(
+            icon: Icon(Icons.edit),
+            color: Theme.of(context).primaryColor,
+            onPressed: () {
+              Navigator.of(context)
+                  .pushNamed(EditProductScreen.routeName, arguments: id);
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.delete),
+            color: Theme.of(context).accentColor,
+            onPressed: () async {
+              try {
+                final productData = Provider.of<Products>(context, listen: false);
+                await productData.deleteProduct(id);
+              } catch (error) {
+                scafold.showSnackBar(
+                  SnackBar(
+                    content: Text('Deleting failed'),
+                  ),
+                );
+              }
+            },
+          )
+        ],
+      ),
     );
   }
 }
