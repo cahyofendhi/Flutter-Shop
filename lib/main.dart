@@ -9,6 +9,7 @@ import 'package:shop/screens/orders_screen.dart';
 
 import 'package:shop/screens/product_detail_screen.dart';
 import 'package:shop/screens/product_overview_screen.dart';
+import 'package:shop/screens/splash_screen.dart';
 import 'package:shop/screens/user_products_screen.dart';
 
 import 'providers/products.dart';
@@ -28,17 +29,15 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<Auth, Products>(
           //! class changes and the seconds is class to provides
           builder: (ctx, auth, previousProducts) => Products(
-            auth.token, 
-            auth.userId,
-            previousProducts == null ? [] : previousProducts.items),
+              auth.token,
+              auth.userId,
+              previousProducts == null ? [] : previousProducts.items),
         ),
         ChangeNotifierProvider.value(
           value: Cart(),
         ),
         ChangeNotifierProxyProvider<Auth, Orders>(
-          builder: (ctx, auth, previousOrder) => Orders(
-              auth.token,
-              auth.userId,
+          builder: (ctx, auth, previousOrder) => Orders(auth.token, auth.userId,
               previousOrder == null ? [] : previousOrder.orders),
         ),
       ],
@@ -49,7 +48,15 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.blue,
               accentColor: Colors.deepOrangeAccent,
               fontFamily: 'Lato'),
-          home: auth.isAuth ? ProductOverviewScreen() : AuthScreen(),
+          home: auth.isAuth
+              ? ProductOverviewScreen()
+              : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (ctx, authResultSnapshot) =>
+                      authResultSnapshot.connectionState == ConnectionState.waiting
+                          ? SplashScreen()
+                          : AuthScreen(),
+                ),
           routes: {
             // ProductOverviewScreen.routeName: (ctx) => ProductOverviewScreen(),
             ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
