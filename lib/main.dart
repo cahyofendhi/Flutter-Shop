@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Lato'),
           home: auth.isAuth ? ProductOverviewScreen() : AuthScreen(),
           routes: {
-            ProductOverviewScreen.routeName: (ctx) => ProductOverviewScreen(),
+            // ProductOverviewScreen.routeName: (ctx) => ProductOverviewScreen(),
             ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
             CartScreen.routeName: (ctx) => CartScreen(),
             OrdersScreen.routeName: (ctx) => OrdersScreen(),
