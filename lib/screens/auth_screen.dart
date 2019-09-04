@@ -152,8 +152,8 @@ class _AuthCardState extends State<AuthCard> {
           _authData['password'],
         );
       }
-      Navigator.of(context).pushReplacementNamed(ProductOverviewScreen.routeName);
-      
+      // Navigator.of(context).pushReplacementNamed(ProductOverviewScreen.routeName);
+
     } on HttpException catch (error) {
       var errorMessage = "Authentication failed";
       if (error.message.contains('EMAIL_EXIST')) {
@@ -169,6 +169,7 @@ class _AuthCardState extends State<AuthCard> {
       }
       _showErrorDialog(errorMessage);
     } catch (error) {
+      print('error : $error');
       const errorMessage = "Could not authenticate you. Plase try again later";
       _showErrorDialog(errorMessage);
     }
